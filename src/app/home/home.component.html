@@ -1,0 +1,45 @@
+<div id="spinner" *ngIf="this.loaded == false">
+<mat-spinner style="margin-bottom: 20px;"></mat-spinner>
+</div>
+<div *ngIf="this.loaded == true" >
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="firstNm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.Info[0].$.firstNm}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="lastNm">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.Info[0].$.lastNm}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="organization" mat-sort-header>
+    <th mat-header-cell *matHeaderCellDef> Organization </th>
+    <td mat-cell *matCellDef="let element"> {{element.CrntEmps[0].CrntEmp[0].$.orgNm}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="link" mat-sort-header>
+    <th mat-header-cell *matHeaderCellDef> Link </th>
+    <td mat-cell *matCellDef="let element"> {{element.Info[0].$.link}} </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</div>
+<div id="table">
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" pageSize="10" style="width: 80%; margin: 0 auto;"></mat-paginator>
+</div>
