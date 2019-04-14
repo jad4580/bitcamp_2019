@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
 @Component({
@@ -9,9 +9,10 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 })
 export class HomeComponent implements OnInit {
 
-  displayedColumns: string[] = ['firstNm', 'lastNm', 'organization', 'link'];
+  displayedColumns: string[] = ['firstNm', 'lastNm', 'organization', 'city', 'link', 'state', 'options'];
   data = '';
   array = [];
+  stateArray = [];
   dataSource: MatTableDataSource<any>;
   loaded: boolean;
 
@@ -30,7 +31,6 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       const parseString = require('xml2js').parseString;
       parseString(this.data, (err, result) => {
-        // console.dir(result.IAPDIndividualReport.Indvls[0].Indvl);
         this.array = result.IAPDIndividualReport.Indvls[0].Indvl;
       });
       this.dataSource = new MatTableDataSource(this.array);
@@ -39,32 +39,40 @@ export class HomeComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.loaded = true;
 
-      /* configure filter */
-      this.dataSource.filterPredicate =
-        (data, filter: string) => {
-          if (filter in data.Info[0].$ || filter in data.element.CrntEmps[0].CrntEmp[0].$) {
-            return true;
-          } else {
-            return false;
-          }
-        };
+      for (let i = 0; i < this.array.length; i++) {
+        let state = this.array[i].CrntEmps[0].CrntEmp[0].$.state;
+        if (state != '' && this.stateArray.includes(state) === false) {
+          this.stateArray.push(state);
+        }
+      }
+      this.stateArray.sort();
     }, 1000);
   }
 
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyStateFilter(filterValue: string) {
+    /* configure filter */
+    console.log(filterValue);
+    this.dataSource.filterPredicate =
+      (data, filter: string) => {
+        if (data.CrntEmps[0].CrntEmp[0].$.state !== undefined) {
+          return data.CrntEmps[0].CrntEmp[0].$.state == filter;
+        } else {
+          return false;
+        }
+      };
+    this.dataSource.filter = filterValue;
+    //
+    // this.dataSource.data = this.dataSource.data.filter((element) => {
+    //   if (element.CrntEmps[0].CrntEmp[0].$.state !== undefined) {
+    //     return element.CrntEmps[0].CrntEmp[0].$.state == filterValue;
+    //   } else {
+    //     return false;
+    //   }
+    // });
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
-}
-
-export interface PeriodicElement {
-  actvAGReg: string;
-  firstNm: string;
-  indvlPK: string;
-  lastNm: string;
-  link: string;
 }

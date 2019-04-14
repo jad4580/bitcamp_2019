@@ -15,6 +15,8 @@ import {MatPaginatorModule} from '@angular/material';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material';
 import {MatInputModule} from '@angular/material';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSelectModule} from '@angular/material/select';
 
 import {CovalentLayoutModule} from '@covalent/core/layout';
 import {CovalentStepsModule} from '@covalent/core/steps';
@@ -26,12 +28,14 @@ import { CovalentMarkdownModule } from '@covalent/markdown';
 import { CovalentDynamicFormsModule } from '@covalent/dynamic-forms';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ShowComponent } from './show/show.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    ShowComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +52,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
+    MatSelectModule,
 
     CovalentLayoutModule,
     CovalentStepsModule,

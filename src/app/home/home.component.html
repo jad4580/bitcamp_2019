@@ -2,9 +2,16 @@
 <mat-spinner style="margin-bottom: 20px;"></mat-spinner>
 </div>
 <div *ngIf="this.loaded == true" >
-<mat-form-field>
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
-</mat-form-field>
+  <mat-form-field>
+  <mat-select>
+    <mat-option
+      *ngFor="let state of stateArray"
+      [value]="state"
+      (click)="applyStateFilter(state)">
+      {{state}}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
@@ -30,11 +37,37 @@
   </ng-container>
 
   <!-- Name Column -->
+  <ng-container matColumnDef="city" mat-sort-header>
+    <th mat-header-cell *matHeaderCellDef> City </th>
+    <td mat-cell *matCellDef="let element"> {{element.CrntEmps[0].CrntEmp[0].$.city}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
   <ng-container matColumnDef="link" mat-sort-header>
     <th mat-header-cell *matHeaderCellDef> Link </th>
     <td mat-cell *matCellDef="let element"> {{element.Info[0].$.link}} </td>
   </ng-container>
 
+  <!-- Name Column -->
+  <ng-container matColumnDef="state" mat-sort-header>
+    <th mat-header-cell *matHeaderCellDef> State </th>
+    <td mat-cell *matCellDef="let element"> {{element.CrntEmps[0].CrntEmp[0].$.state}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="options" mat-sort-header>
+    <th mat-header-cell *matHeaderCellDef> State </th>
+    <td mat-cell *matCellDef="let element">
+      <a mat-list-item [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></a>
+    </td>
+  </ng-container>
+
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>dialpad</mat-icon>
+      <span>Show</span>
+    </button>
+  </mat-menu>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
